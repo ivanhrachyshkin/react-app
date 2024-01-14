@@ -1,35 +1,25 @@
-import { useState, useRef } from "react";
-import './App.css';
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FormDataType } from "../../types/FormDataType";
+import { InputFieldType } from "../../types/InputFieldType";
 
-function App() {
-  type InputField = {
-    name: string,
-    type: string,
-    label: string
-  }
+function LoginForm() {
 
-  type FormData = {
-    name: string,
-    email: string,
-    password: string,
-    isAccepted: boolean
-  }
-
-  const inputFields: InputField[] = [
+  const inputFields: InputFieldType[] = [
     { name: 'name', type: 'text', label: 'Name' },
     { name: 'email', type: 'email', label: 'Email' },
     { name: 'password', type: 'password', label: 'Password' },
   ];
 
+  const navigate = useNavigate();
   const refs = useRef(inputFields.map(() => useRef<HTMLInputElement>(null)));
-  const [formData, setFormData] = useState<FormData>({
+  const [errors, setErrors] = useState<Map<number, string>>(new Map);
+  const [formData, setFormData] = useState<FormDataType>({
     name: '',
     email: '',
     password: '',
     isAccepted: false
   });
-
-  const [errors, setErrors] = useState<Map<number, string>>(new Map);
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -43,7 +33,10 @@ function App() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    validateForm()
+    const isValid = validateForm()
+    if (!isValid) return;
+    sessionStorage.setItem('formData', JSON.stringify(formData));
+    navigate('/profile')
   };
 
   const validateForm = () => {
@@ -65,6 +58,7 @@ function App() {
     }
 
     setErrors(newErrors);
+    return newErrors.size ? false : true;
   };
 
   return (
@@ -101,4 +95,4 @@ function App() {
   );
 }
 
-export default App;
+export default LoginForm;
