@@ -4,6 +4,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Bar from './components/bar/Bar';
 import LoginForm from './components/content/LoginForm';
 import Profile from './components/content/Profile';
+import CatFactList from './components/content/CatFactList';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/cat-facts",
+        element: <CatFactList />,
       },
     ],
   },
